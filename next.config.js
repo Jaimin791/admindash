@@ -3,8 +3,8 @@ const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
   env: {
-    API_PROD_URL: 'https://admin.medchoiceone.com/api/admin', // Change only the domain part, keeping "/api/admin" intact
-    storageURL: 'https://admin.medchoiceone.com' // change only the laravel primary domain
+    API_PROD_URL: 'https://api.medchoiceone.com/api/admin', // Change only the domain part, keeping "/api/admin" intact
+    storageURL: 'https://api.medchoiceone.com' // change only the laravel primary domain
   },
   redirects: async () => {
     return [
@@ -20,7 +20,7 @@ const nextConfig = {
    remotePatterns: [
       {
         protocol: "https",
-        hostname: "admin.medchoiceone.com",
+        hostname: "api.medchoiceone.com",
       },
       {
         protocol: "http",
