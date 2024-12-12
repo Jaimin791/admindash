@@ -1,17 +1,30 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: false,
+  swcMinify: true,
   env: {
-    API_PROD_URL: 'http://3.28.50.238/api',
-    baseURL: 'http://localhost:3001',
-    URL: 'http://3.28.50.238/api',
-    storageURL: 'http://3.28.50.238',
+    API_PROD_URL: 'https://admin.medchoiceone.com/api/admin', // Change only the domain part, keeping "/api/admin" intact
+    storageURL: 'https://admin.medchoiceone.com' // change only the laravel primary domain
+  },
+  redirects: async () => {
+    return [
+      {
+        source: "/",
+        destination: "/dashboard",
+
+        permanent: true,
+      },
+    ];
   },
   images: {
-    domains: ['3.28.50.238', 'localhost'],
-    remotePatterns: [
+   remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "admin.medchoiceone.com",
+      },
       {
         protocol: "http",
-        hostname: "3.28.50.238",
+        hostname: "127.0.0.1",
       },
       {
         protocol: "http",
@@ -19,11 +32,8 @@ const nextConfig = {
       },
     ],
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
+  devIndicators: {
+    buildActivity: false,
   },
 };
 
