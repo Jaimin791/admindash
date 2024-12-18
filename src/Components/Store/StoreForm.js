@@ -5,89 +5,109 @@ import { Row } from "reactstrap";
 import FormBtn from "../../Elements/Buttons/FormBtn";
 import request from "../../Utils/AxiosUtils";
 import { store } from "../../Utils/AxiosUtils/API";
-import { getHelperText } from '../../Utils/CustomFunctions/getHelperText';
-import { YupObject, passwordConfirmationSchema, passwordSchema } from "../../Utils/Validation/ValidationSchemas";
+import { YupObject, nameSchema, descriptionSchema } from "../../Utils/Validation/ValidationSchemas";
 import Loader from "../CommonComponent/Loader";
 import AddressComponent from "../InputFields/AddressComponent";
 import CheckBoxField from "../InputFields/CheckBoxField";
-import FileUploadField from "../InputFields/FileUploadField";
 import SimpleInputField from "../InputFields/SimpleInputField";
-import { StoreInitialValue } from "./Widgets/StoreInitialValue";
-import { StoreValidationSchema } from "./Widgets/StoreValidationSchema";
-import StoreVendor from "./Widgets/StoreVendor";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
 
 const StoreForm = ({ mutate, updateId, loading, buttonName }) => {
-  
-  const { t } = useTranslation( 'common');
+  const { t } = useTranslation('common');
   const router = useRouter();
-  const { data: oldData, isLoading, refetch } = useQuery(["store/id"], () => request({ url: store + "/" + updateId },router), {
-    refetchOnMount: false, refetchOnWindowFocus: false, enabled: false, select: (data) => (data?.data),
+  
+  const { data: oldData, isLoading, refetch } = useQuery(["store/id"], () => request({ url: store + "/" + updateId }, router), {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    enabled: false,
+    select: (data) => (data?.data),
   });
+
   useEffect(() => {
     updateId && refetch();
   }, [updateId]);
+
   if (updateId && isLoading) return <Loader />
+
+  // Generate a unique phone number based on timestamp
+  const generateUniquePhone = () => {
+    const timestamp = Date.now().toString().slice(-10);
+    return timestamp;
+  };
+
   return (
-    <>
-      <Formik
-        enableReinitialize
-        initialValues={{ ...StoreInitialValue(updateId, oldData) }}
-        validationSchema={YupObject({
-          ...StoreValidationSchema,
-          password: !updateId && passwordSchema,
-          password_confirmation: !updateId && passwordConfirmationSchema,
-        })}
-        onSubmit={(values) => {
-          if (updateId) {
-            delete values["password"];
-            delete values["password_confirmation"];
-            typeof values["store_logo"] == "string" && delete values["store_logo"];
-            values["_method"] = "put";
-          }
-          delete values["store_logo"];
-          values["status"] = Number(values["status"]);
-          values["hide_vendor_phone"] = Number(values["hide_vendor_phone"]);
-          values["hide_vendor_email"] = Number(values["hide_vendor_email"]);
-          if (values['store_logo_id'] == undefined) values['store_logo_id'] = null
-          mutate(values);
-        }}>
-        {({ setFieldValue, values, errors, touched }) => (
-          <Form className="theme-form theme-form-2 mega-form">
-            <Row>
-              <FileUploadField values={values} setFieldValue={setFieldValue} title="StoreLogo" type="file" id="store_logo_id" name="store_logo_id" updateId={updateId} errors={errors} touched={touched} helpertext={getHelperText('500x500px')} />
-              <SimpleInputField nameList={[{ name: "store_name", placeholder: t("EnterStoreName"), require: "true" }, { name: "description", title: "StoreDescription", type: "textarea", placeholder: t("EnterDescription"), require: "true" }]} />
-              <AddressComponent values={values} />
-              <StoreVendor />
-              <div>
-                {!updateId && (
-                    <>
-                        <SimpleInputField
-                            nameList={[
-                                { name: "password", type: "password", placeholder: t("EnterPassword"), require: 'true' },
-                                { name: "password_confirmation", title: "ConfirmPassword", type: "password", placeholder: t("Re-EnterPassword"), require: 'true' },
-                            ]}
-                        />
-                    </>
-                )}
-            </div>
-              <SimpleInputField nameList={[
-                { name: "facebook", type: "url", placeholder: t("EnterFacebookurl") },
-                { name: "pinterest", type: "url", placeholder: t("EnterPinteresturl") },
-                { name: "instagram", type: "url", placeholder: t("EnterInstagramurl") },
-                { name: "twitter", type: "url", placeholder: t("EnterTwitterurl") },
-                { name: "youtube", type: "url", placeholder: t("EnterYoutubeurl") },
-              ]} />
-              <CheckBoxField name="hide_vendor_email" title="HideEmail" />
-              <CheckBoxField name="hide_vendor_phone" title="HidePhone" />
-              <CheckBoxField name="status" />
-              <FormBtn loading={loading} buttonName={buttonName}/>
-            </Row>
-          </Form>
-        )}
-      </Formik>
-    </>
+    <Formik
+      enableReinitialize
+      initialValues={{
+        store_name: updateId ? oldData?.store_name || "" : "",
+        description: updateId ? oldData?.description || "" : "",
+        country_id: updateId ? oldData?.country?.id || "" : "",
+        state_id: updateId ? oldData?.state?.id || "" : "",
+        city: updateId ? oldData?.city || "" : "",
+        address: updateId ? oldData?.address || "" : "",
+        status: updateId ? Boolean(Number(oldData?.status)) : true,
+        pincode: "000000", // Add dummy pincode
+        // Add dummy values for required fields
+        password: "defaultPassword123",
+        password_confirmation: "defaultPassword123",
+        email: `dummy${Date.now()}@example.com`, // Generate unique email
+        phone: generateUniquePhone(), // Generate unique phone
+        name: "Dummy Name"
+      }}
+      validationSchema={YupObject({
+        store_name: nameSchema,
+        description: descriptionSchema,
+        country_id: nameSchema,
+        state_id: nameSchema,
+        city: nameSchema,
+        address: nameSchema
+      })}
+      onSubmit={(values) => {
+        // Add method for update
+        if (updateId) {
+          values["_method"] = "put";
+        } else {
+          // Only generate new values for create operation
+          values["phone"] = generateUniquePhone();
+          values["email"] = `dummy${Date.now()}@example.com`;
+        }
+
+        // Set dummy values for required fields
+        values["password"] = "defaultPassword123";
+        values["password_confirmation"] = "defaultPassword123";
+        values["name"] = "Dummy Name";
+        values["pincode"] = "000000";
+        values["status"] = Number(values["status"]);
+        values["hide_vendor_phone"] = 0;
+        values["hide_vendor_email"] = 0;
+
+        // Ensure country_id and state_id are sent as numbers
+        values["country_id"] = values.country_id ? Number(values.country_id) : "";
+        values["state_id"] = values.state_id ? Number(values.state_id) : "";
+
+        mutate(values);
+      }}
+    >
+      {({ values }) => (
+        <Form className="theme-form theme-form-2 mega-form">
+          <Row>
+            <SimpleInputField
+              nameList={[
+                { name: "store_name", title: t("Name"), placeholder: t("Enter Name"), require: "true" },
+                { name: "description", title: t("Description"), placeholder: t("Enter Description"), require: "true" },
+              ]}
+            />
+            
+            <AddressComponent values={values} noAddress={false} />
+            
+            <CheckBoxField name="status" title={t("Status")} />
+            
+            <FormBtn loading={loading} buttonName={buttonName} />
+          </Row>
+        </Form>
+      )}
+    </Formik>
   );
 };
 

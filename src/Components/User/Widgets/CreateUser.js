@@ -1,8 +1,7 @@
 import { AllCountryCode } from "../../../Data/AllCountryCode";
 import SearchableSelectInput from "../../InputFields/SearchableSelectInput";
-import CheckBoxField from "../../InputFields/CheckBoxField";
 import SimpleInputField from "../../InputFields/SimpleInputField";
-
+import CheckBoxField from "../../InputFields/CheckBoxField";
 import { useTranslation } from "react-i18next";
 
 const CreateUser = ({ updateId, fixedRole, rolesData }) => {
@@ -46,37 +45,18 @@ const CreateUser = ({ updateId, fixedRole, rolesData }) => {
         />
       </div>
       <div>
-        {!updateId && (
+      {!updateId && (
           <>
-            <SimpleInputField
-              nameList={[
-                { name: "password", type: "password", placeholder: t("EnterPassword"), require: "true" },
-                { name: "password_confirmation", title: "ConfirmPassword", type: "password", placeholder: t("EnterConfirmPassword"), require: "true" },
-              ]}
-            />
+          
+         
           </>
         )}
       </div>
 
-      {!fixedRole && (
+      {!updateId && (
         <>
-          <SearchableSelectInput
-            nameList={[
-              {
-                name: "role_id",
-                require: "true",
-                title: "Role",
-                inputprops: {
-                  name: "role_id",
-                  id: "role_id",
-                  options: rolesData || [],
-                  defaultOption: "Select state",
-                  initialTittle:"Select Role"
-                },
-              },
-            ]}
-          />
-          <CheckBoxField name="status" />
+         
+          <CheckBoxField name="status" /> 
         </>
       )}
     </>

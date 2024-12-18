@@ -10,7 +10,7 @@ const AddNewUser = () => {
   const { mutate, isLoading } = useCreate(user, false, `/user`);
   return (
     <FormWrapper title="AddUser">
-      <UserForm mutate={mutate} loading={isLoading} buttonName="Save User"/>
+      <UserForm mutate={mutate} loading={isLoading} buttonName="Save Patient"/>
     </FormWrapper>
   );
 };

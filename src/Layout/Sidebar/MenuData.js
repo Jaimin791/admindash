@@ -9,13 +9,13 @@ const MENUITEMS = [
     type: "link"
   },
   {
-    title: "Users",
-    displayTitle: "Users",
+    title: "Patients",
+    displaTitle: "Patients",
     icon: <RiContactsLine />,
     type: "sub",
     children: [
-      { title: "AddUser", path: "/user/create", displayTitle: "AddUser", permission: ["user.create"] },
-      { title: "AllUsers", path: "/user", displayTitle: "AllUsers", permission: ["user.index"] },
+      { title: "Add Patient", path: "/user/create", displayTitle: "Add Patient", permission: ["user.create"] },
+      { title: "All Patients", path: "/user", displayTitle: "All Patients", permission: ["user.index"] },
       { title: "Role", path: "/role", displayTitle: "Role", permission: ["role.index"] },
     ],
   },
@@ -36,13 +36,13 @@ const MENUITEMS = [
     ],
   },
   {
-    title: "Stores",
-    displayTitle: "Store",
+    title: "Partners",
+    displayTitle: "Partners",
     icon: <RiStore2Line />,
     type: "sub",
     children: [
-      { title: "AddStore", path: "/store/create", displayTitle: "Add Store", permission: ["store.create"] },
-      { title: "AllStores", path: "/store", displayTitle: "All Stores", badgeType: 'badge bg-warning text-dark ml-3', badgeValue: 0, permission: ["store.index"] },
+      { title: "Add Partner", path: "/store/create", displayTitle: "Add Partner", permission: ["store.create"] },
+      { title: "All Partners", path: "/store", displayTitle: "All Partners", badgeType: 'badge bg-warning text-dark ml-3', badgeValue: 0, permission: ["store.index"] },
       { title: "Wallet", path: "/vendor_wallet", displayTitle: "Wallets", permission: ["vendor_wallet.index"] },
       { title: "CommissionHistory", path: "/commission", displayTitle: "Commission History", permission: ["commission_history.index"] },
       { title: "PaymentDetails", path: "/payment_account", displayTitle: "Payment Details", permission: ["payment_account.create"] },

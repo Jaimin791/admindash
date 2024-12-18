@@ -1,4 +1,9 @@
 export const StoreInitialValue = (updateId, oldData) => {
+    // Generate unique identifiers
+    const timestamp = Date.now();
+    const phone = timestamp.toString().slice(-10);
+    const email = `dummy${timestamp}@example.com`;
+
     return {
         store_name: updateId ? oldData?.store_name || "" : "",
         description: updateId ? oldData?.description || "" : "",
@@ -6,23 +11,17 @@ export const StoreInitialValue = (updateId, oldData) => {
         state_id: updateId ? oldData?.state?.id || "" : "",
         city: updateId ? oldData?.city || "" : "",
         address: updateId ? oldData?.address || "" : "",
-        pincode: updateId ? oldData?.pincode || "" : "",
-        name: updateId ? oldData?.vendor?.name || "" : "",
-        email: updateId ? oldData?.vendor?.email || "" : "",
-        password: "",
-        password_confirmation: "",
-        store_logo_id: updateId ? oldData?.store_logo?.id || "" : undefined,
-        store_logo: updateId ? oldData?.store_logo || "" : "",
-        store_cover: updateId ? oldData?.store_cover || "" : "",
-        hide_vendor_email: updateId ? Boolean(Number(oldData?.hide_vendor_email)) : false,
-        hide_vendor_phone: updateId ? Boolean(Number(oldData?.hide_vendor_phone)) : false,
-        phone: updateId ? oldData?.vendor?.phone || "" : "",
         status: updateId ? Boolean(Number(oldData?.status)) : true,
-        country_code: updateId ? oldData?.vendor?.country_code || "" : "91",
-        facebook: updateId ? oldData?.facebook || "" : "",
-        pinterest: updateId ? oldData?.pinterest || "" : "",
-        instagram: updateId ? oldData?.instagram || "" : "",
-        twitter: updateId ? oldData?.twitter || "" : "",
-        youtube: updateId ? oldData?.youtube || "" : "",
+        
+        // Dummy values for API compatibility
+        password: "defaultPassword123",
+        password_confirmation: "defaultPassword123",
+        name: "Dummy Name",
+        email: updateId ? oldData?.vendor?.email || email : email,
+        phone: updateId ? oldData?.vendor?.phone || phone : phone,
+        pincode: "000000",
+        country_code: "91",
+        hide_vendor_email: false,
+        hide_vendor_phone: false
     }
 }

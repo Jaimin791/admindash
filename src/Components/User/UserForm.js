@@ -39,10 +39,10 @@ const UserForm = ({ mutate, loading, updateId, fixedRole, noRoleField, addAddres
         name: updateId ? oldData?.data?.name || "" : "",
         email: updateId ? oldData?.data?.email || "" : "",
         phone: updateId ? Number(oldData?.data?.phone) || "" : "",
-        password: "",
-        password_confirmation: "",
-        role_id: updateId ? Number(oldData?.data?.role?.id) || "" : fixedRole ? 2 : "",
-        status: updateId ? Boolean(Number(oldData?.data?.status)) : true,
+        status: updateId ? Boolean(Number(oldData?.data?.status)) : false,
+        password: !updateId ? "defaultPassword123" : "",
+        password_confirmation: !updateId ? "defaultPassword123" : "",
+        role_id: 2,
         address: [],
         country_code: updateId ? oldData?.data?.country_code || "" : "91",
       }}
@@ -50,21 +50,19 @@ const UserForm = ({ mutate, loading, updateId, fixedRole, noRoleField, addAddres
         name: nameSchema,
         email: emailSchema,
         phone: phoneSchema,
-        password: !updateId && passwordSchema,
-        password_confirmation: !updateId && passwordConfirmationSchema,
-        role_id: noRoleField ? null : nameSchema,
       })}
       onSubmit={(values) => {
-        if (updateId) {
-          delete values["password"];
-          delete values["password_confirmation"];
+        // Add default password and role for new patients
+        if (!updateId) {
+          values["password"] = "defaultPassword123";
+          values["password_confirmation"] = "defaultPassword123";
+          values["role_id"] = 2;
         }
-        if (noRoleField) {
-          delete values["role_id"];
-        }
+
+        // Ensure status is set correctly
         values["status"] = Number(values["status"]);
-        if (addAddress) values["address"][0]["is_default"] = Number(values["address"][0]["is_default"]) || false;
-        if (type) values["address"][0]["type"] = type;
+
+        // Send the data to the API
         mutate(values);
       }}
     >

@@ -6,9 +6,5 @@ export const StoreValidationSchema = {
     country_id: nameSchema,
     state_id: nameSchema,
     city: nameSchema,
-    address: nameSchema,
-    pincode: nameSchema,
-    name: nameSchema,
-    email: emailSchema,
-    phone: phoneSchema,
-}
+    address: nameSchema
+};
