@@ -25,7 +25,7 @@ const ReceiptModal = ({ open, setOpen, data }) => {
         >
             <div className="ticket">
                 <div className="title-text text-center">
-                    <h4>{settingObj?.general?.site_name || 'Logo here'}</h4>
+                    <h4>{settingObj?.general?.site_name || 'MedChoiceOne'}</h4>
                 </div>
                 <ul className="centered">
                     <li>{t("OrderNumber")}: {data.order_number}</li>
